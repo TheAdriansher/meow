@@ -1,0 +1,606 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="robots" content="noindex,nofollow">
+<style>[hidden]{display:none!important}:root{padding-block:env(safe-area-inset-top,0px) env(safe-area-inset-bottom,0px)}</style>
+<title>La cocina de los gatos</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bagel+Fat+One&family=Figtree:wght@400;500;700&display=swap">
+<style>
+/* Layout: una columna estrecha pensada para el celular. Cuatro escenas que se muestran de una en una:
+   gato dormido sobre el sobre, cocina con el pastel, jardín con la carta, vela final. */
+:root{
+  color-scheme:light;
+  --bg:#fbeef3;
+  --paper:#fffafc;
+  --ink:#3a2146;
+  --muted:#6f5a7a;
+  --line:#ecd2df;
+  --berry:#c92c58;
+  --berry-dark:#a9204a;
+  --leaf:#4f9a6f;
+  --butter:#f7d46a;
+  --lilac:#cdb8f2;
+  --lime:#c6f23a;
+  --mint:#d9efe9;
+  --display:'Bagel Fat One','Arial Rounded MT Bold','Trebuchet MS',system-ui,sans-serif;
+  --body:'Figtree',system-ui,-apple-system,'Segoe UI',sans-serif;
+  --sponge:#f2d7a0;
+  --filling:#fff3d6;
+  --frost:#fff8ee;
+}
+*{box-sizing:border-box}
+body{margin:0;padding-inline:16px;padding-block:22px 56px;background:var(--bg);color:var(--ink);font-family:var(--body);font-size:1rem;line-height:1.55;-webkit-tap-highlight-color:transparent}
+.wrap{max-width:540px;margin-inline:auto;display:flex;flex-direction:column;gap:20px}
+.sr-only{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap}
+:focus-visible{outline:3px solid var(--ink);outline-offset:3px}
+
+h1,h2{font-family:var(--display);font-weight:400;line-height:1.05;text-wrap:balance;margin:0;color:var(--ink)}
+h1{font-size:clamp(2.2rem,9vw,3.2rem)}
+h2{font-size:clamp(1.8rem,7vw,2.3rem)}
+h1 em,h2 em{font-style:normal;color:var(--berry)}
+.eyebrow{margin:0 0 8px;font-size:.75rem;font-weight:700;letter-spacing:.14em;text-transform:uppercase;color:var(--muted)}
+.lead{margin:10px 0 0;color:var(--muted);max-width:46ch}
+.lbl{margin:0 0 8px;font-size:.75rem;font-weight:700;letter-spacing:.14em;text-transform:uppercase;color:var(--muted)}
+
+.steps{display:flex;gap:8px}
+.steps span{flex:1;height:6px;border-radius:99px;background:var(--line);transition:background .4s}
+.steps span.on{background:var(--berry)}
+
+.scene{display:flex;flex-direction:column;gap:18px;animation:sceneIn .5s ease-out}
+@keyframes sceneIn{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:none}}
+
+.btn{font:700 1rem var(--body);min-height:48px;padding:12px 22px;border-radius:999px;border:2px solid var(--ink);background:transparent;color:var(--ink);cursor:pointer;transition:background .2s,color .2s,transform .1s}
+.btn:hover{background:var(--ink);color:#fff}
+.btn:active{transform:scale(.98)}
+.btn.primary{background:var(--berry);border-color:var(--berry);color:#fff}
+.btn.primary:hover{background:var(--berry-dark);border-color:var(--berry-dark)}
+.actions{display:flex;flex-wrap:wrap;gap:10px}
+.err{margin:0;color:var(--berry-dark);font-weight:500;font-size:.9375rem}
+
+.bubble{align-self:center;background:#fff;border:2px solid var(--ink);border-radius:18px;padding:10px 16px;font-weight:500;text-align:center;max-width:100%}
+.bubble.say{animation:pop .3s cubic-bezier(.3,1.5,.5,1)}
+@keyframes pop{from{transform:scale(.85);opacity:.4}to{transform:scale(1);opacity:1}}
+
+.catbtn{display:block;background:none;border:0;padding:0;margin:0;cursor:pointer;border-radius:16px}
+.catbtn svg{display:block;width:100%;height:auto;overflow:visible}
+.hop{animation:hop .5s ease-out}
+@keyframes hop{0%{transform:translateY(0)}35%{transform:translateY(-14px) rotate(-2deg)}70%{transform:translateY(0) rotate(1deg)}100%{transform:none}}
+
+.tail-tabby{transform-origin:148px 198px;animation:wag 3.2s ease-in-out infinite}
+.head-tabby{transform-origin:100px 125px;animation:tilt 7s ease-in-out infinite}
+.tail-tux{transform-origin:54px 138px;animation:wag 2.6s ease-in-out infinite;animation-play-state:paused}
+.tux.awake .tail-tux{animation-play-state:running}
+.tux-body{transform-origin:118px 176px}
+.tux:not(.awake) .tux-body{animation:breathe 3.8s ease-in-out infinite}
+.tux.stretch .tux-body{animation:stretch .9s ease-out}
+.tux-head{transform-origin:180px 142px;transition:transform .6s ease}
+.tux:not(.awake) .tux-head{transform:translate(2px,8px) rotate(7deg)}
+.tux .eye-open,.tux .eye-closed{transition:opacity .25s}
+.tux .eye-open{opacity:0}
+.tux.awake .eye-open{opacity:1}
+.tux.awake .eye-closed{opacity:0}
+.tux.awake .zzz{display:none}
+.zzz text{animation:zfloat 2.8s ease-in-out infinite}
+.zzz text:nth-child(2){animation-delay:.9s}
+.lid{transform-box:fill-box;transform-origin:50% 0;transform:scaleY(0);animation:blink 5.5s infinite}
+@keyframes wag{0%,100%{transform:rotate(-7deg)}50%{transform:rotate(9deg)}}
+@keyframes tilt{0%,100%{transform:rotate(-2deg)}50%{transform:rotate(2.5deg)}}
+@keyframes breathe{0%,100%{transform:scale(1,1)}50%{transform:scale(1.015,1.04)}}
+@keyframes stretch{0%{transform:scale(1,1)}40%{transform:scale(1.09,.93)}100%{transform:scale(1,1)}}
+@keyframes zfloat{0%,100%{transform:translateY(0);opacity:.55}50%{transform:translateY(-6px);opacity:1}}
+@keyframes blink{0%,91%,100%{transform:scaleY(0)}94%{transform:scaleY(1)}}
+
+.envwrap{display:flex;flex-direction:column;align-items:center;padding-top:6px}
+.envwrap .catbtn{position:relative;z-index:2;width:min(80%,300px);margin-bottom:-56px}
+.envelope{display:block;width:100%}
+
+.stage{background:var(--paper);border:2px solid var(--line);border-radius:28px;padding:14px}
+.stage.flush{padding:0;overflow:hidden}
+.stage svg.big{display:block;width:100%;max-width:330px;margin-inline:auto;overflow:visible}
+#cake.drop{outline:2px dashed var(--berry);outline-offset:6px;border-radius:12px}
+.stage .garden{display:block;width:100%;height:auto}
+
+.talk{display:grid;grid-template-columns:78px minmax(0,1fr) 98px;gap:10px;align-items:end}
+.talk .bubble{position:relative;align-self:center;font-size:.9375rem}
+.talk .bubble::after{content:"";position:absolute;top:50%;margin-top:-7px;width:14px;height:14px;background:#fff;border:solid var(--ink);transform:rotate(45deg)}
+.talk .bubble[data-who="L"]::after{left:-9px;border-width:0 0 2px 2px}
+.talk .bubble[data-who="R"]::after{right:-9px;border-width:2px 2px 0 0}
+
+.group{display:flex;flex-direction:column}
+.chips,.tops{display:flex;flex-wrap:wrap;gap:8px}
+.chip{display:inline-flex;align-items:center;gap:8px;min-height:44px;padding:6px 14px 6px 8px;border:2px solid var(--line);border-radius:999px;background:var(--paper);color:var(--ink);font:500 .9375rem var(--body);cursor:pointer;transition:border-color .2s,background .2s}
+.chip[aria-pressed="true"]{border-color:var(--ink);background:#fff}
+.chip .dot{width:26px;height:26px;border-radius:50%;border:2px solid rgba(58,33,70,.2)}
+.tp{display:flex;flex-direction:column;align-items:center;gap:2px;width:72px;padding:8px 4px 6px;border:2px dashed var(--lilac);border-radius:20px;background:var(--paper);color:var(--ink);font:500 .75rem var(--body);cursor:grab;touch-action:none;user-select:none;-webkit-user-select:none}
+.tp:hover{border-color:var(--berry)}
+.tp svg{width:40px;height:40px;display:block}
+.ghost{position:fixed;left:0;top:0;width:56px;height:56px;z-index:50;pointer-events:none;opacity:0}
+.ghost svg{width:100%;height:100%}
+
+.top .pop,.pop{transform-origin:0 0;animation:topPop .4s cubic-bezier(.3,1.7,.5,1)}
+@keyframes topPop{from{transform:scale(0)}to{transform:scale(1)}}
+#pearl{opacity:0}
+#pearl.roll{animation:roll 1.6s ease-in forwards}
+@keyframes roll{0%{opacity:1;transform:translate(0,0)}55%{opacity:1;transform:translate(34px,6px)}100%{opacity:0;transform:translate(62px,64px)}}
+
+.flower{cursor:pointer;outline:none}
+.flower:focus-visible .ring{stroke:var(--ink);stroke-width:3}
+.flower .petal{transform-origin:0 0;transform:scale(.3);transition:transform .7s cubic-bezier(.3,1.5,.5,1)}
+.flower .core{transform-origin:0 0;transform:scale(0);transition:transform .5s .2s cubic-bezier(.3,1.5,.5,1)}
+.flower .calyx{transition:opacity .3s}
+.flower .ring{transform-origin:0 0;animation:ring 2s ease-out infinite}
+.flower.open .petal,.flower.open .core{transform:scale(1)}
+.flower.open .calyx,.flower.open .ring{opacity:0;animation:none}
+@keyframes ring{0%{transform:scale(.7);opacity:.9}100%{transform:scale(1.25);opacity:0}}
+
+.count{margin:0;font-weight:700;font-size:.875rem;color:var(--muted)}
+.letter{background:var(--paper);border:2px solid var(--line);border-radius:20px;padding:18px 18px 10px;display:flex;flex-direction:column;gap:14px}
+.slot{margin:0 0 6px;min-height:1.6em;font-size:1.0625rem;line-height:1.6}
+.slot.empty{border-bottom:2px dashed var(--line);padding-bottom:4px}
+.slot.empty::before{content:"Una flor guarda esta línea";font-size:.8125rem;letter-spacing:.04em;color:var(--muted)}
+.slot.new{animation:sceneIn .6s ease-out}
+
+.flame{transform-box:fill-box;transform-origin:50% 100%;animation:flick .6s ease-in-out infinite alternate;transition:opacity .25s}
+@keyframes flick{from{transform:scale(1,1) rotate(-2deg)}to{transform:scale(.93,1.07) rotate(2deg)}}
+.smoke{opacity:0}
+.out .flame{opacity:0;animation:none}
+.out .smoke{animation:smoke 1.8s ease-out forwards}
+@keyframes smoke{0%{opacity:.9;transform:translateY(0)}100%{opacity:0;transform:translateY(-26px)}}
+#candle{cursor:pointer}
+
+.cuddle .catbtn.cl{transform:translateX(16px)}
+.cuddle .catbtn.cr{transform:translateX(-12px)}
+.catbtn{transition:transform .8s ease}
+.pair{display:flex;align-items:flex-end;justify-content:center;gap:6px}
+.pair .cl{width:36%}
+.pair .cr{width:52%}
+
+#after{display:flex;flex-direction:column;gap:16px}
+#after h2{outline:none}
+.sign{margin:0;font-weight:500;color:var(--muted);text-align:right}
+.ask{font-family:var(--display);font-size:1.6rem;line-height:1.15;margin:4px 0 0;text-wrap:balance}
+.reply{margin:0;min-height:1.6em;font-weight:500}
+
+.poem{display:flex;flex-direction:column;gap:14px;padding:10px 4px 0}
+.poem h3{font-family:var(--display);font-weight:400;font-size:1.5rem;line-height:1.15;margin:0;color:var(--ink)}
+.stanza{margin:0;font-size:1.0625rem;line-height:1.8}
+.stanza span{display:block;opacity:0;animation:verse .8s ease-out forwards;animation-delay:calc(var(--i) * .35s + .6s)}
+@keyframes verse{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:none}}
+
+.petals{position:fixed;inset:0;overflow:hidden;pointer-events:none;z-index:40}
+.fall{position:absolute;top:-28px;left:var(--x);width:14px;height:20px;border-radius:70% 0 70% 0;background:var(--c);border:1px solid rgba(58,33,70,.15);animation:fall var(--d) linear var(--dl) forwards}
+@keyframes fall{to{transform:translate(var(--sway),115vh) rotate(var(--rot))}}
+
+@media (prefers-reduced-motion:reduce){
+  *,*::before,*::after{animation:none!important;transition:none!important}
+  .petals{display:none}
+  .stanza span{opacity:1!important}
+}
+</style>
+
+</head>
+<body>
+<main class="wrap">
+  <div class="steps" id="steps" role="img" aria-label="Paso 1 de 4"><span class="on"></span><span></span><span></span><span></span></div>
+
+  <section class="scene" data-s="1">
+    <div>
+      <p class="eyebrow">Una carta para ti</p>
+      <h1>Hay un gato durmiendo sobre <em>tu carta</em></h1>
+      <p class="lead">No se puede abrir hasta que despierte. Tócalo, con cariño.</p>
+    </div>
+    <div class="bubble say" id="b1" data-who="R" aria-live="polite">Zzz</div>
+    <div class="envwrap">
+      <button class="catbtn" id="tux1" data-cat="tux" aria-label="Gato blanquinegro dormido. Tócalo para despertarlo"></button>
+      <svg class="envelope" viewBox="0 0 320 190" aria-hidden="true">
+        <rect x="6" y="6" width="308" height="178" rx="14" fill="#f9d3e0" stroke="#d9a3b9" stroke-width="2"/>
+        <path d="M6 20L160 118L314 20" fill="#f3b9cf" stroke="#d9a3b9" stroke-width="2" stroke-linejoin="round"/>
+        <path d="M6 178L124 98M314 178L196 98" fill="none" stroke="#d9a3b9" stroke-width="2"/>
+        <g transform="translate(160 118)">
+          <g fill="#c92c58"><ellipse cx="0" cy="-9" rx="6" ry="9"/><ellipse cx="0" cy="-9" rx="6" ry="9" transform="rotate(72)"/><ellipse cx="0" cy="-9" rx="6" ry="9" transform="rotate(144)"/><ellipse cx="0" cy="-9" rx="6" ry="9" transform="rotate(216)"/><ellipse cx="0" cy="-9" rx="6" ry="9" transform="rotate(288)"/></g>
+          <circle r="5" fill="#f7d46a"/>
+        </g>
+      </svg>
+    </div>
+    <div class="actions"><button class="btn primary" id="go1" type="button">Despertar al gato</button></div>
+  </section>
+
+  <section class="scene" data-s="2" hidden>
+    <div>
+      <h2>Arma un <em>pastel</em></h2>
+      <p class="lead">Arrastra los toppings al pastel, o tócalos y se acomodan solos. Los gatos van a opinar.</p>
+    </div>
+    <div class="stage"><svg id="cake" class="big" viewBox="0 0 300 260" role="img" aria-label="Pastel de dos pisos que estás armando"></svg></div>
+    <div class="talk">
+      <button class="catbtn" id="tabK" data-cat="tabby" data-awake="1" aria-label="Gato atigrado de ojos verdes"></button>
+      <div class="bubble" id="b2" data-who="L" aria-live="polite">Esto va a quedar bonito.</div>
+      <button class="catbtn" id="tuxK" data-cat="tux" data-awake="1" aria-label="Gato blanquinegro con arnés verde"></button>
+    </div>
+    <div class="group"><h3 class="lbl">Toppings</h3><div class="tops" id="palette"></div></div>
+    <div class="group"><h3 class="lbl">Bizcocho</h3><div class="chips" id="sponges"></div></div>
+    <div class="group"><h3 class="lbl">Betún</h3><div class="chips" id="frosts"></div></div>
+    <p class="err" id="err" role="alert" hidden></p>
+    <div class="actions">
+      <button class="btn" id="undo" type="button">Quitar el último</button>
+      <button class="btn primary" id="go2" type="button">Llevarlo al jardín</button>
+    </div>
+  </section>
+
+  <section class="scene" data-s="3" hidden>
+    <div>
+      <h2>Ahora, las <em>flores</em></h2>
+      <p class="lead">Cada flor guarda una línea de la carta. Tócalas todas.</p>
+    </div>
+    <div class="stage flush"><svg id="garden" class="garden" viewBox="0 0 368 260" role="group" aria-label="Jardín con cinco flores cerradas, el pastel y los dos gatos"></svg></div>
+    <p class="count" id="count" aria-live="polite">0 de 5 flores abiertas</p>
+    <div class="bubble" id="b3" data-who="L" aria-live="polite">Cada flor guarda una línea.</div>
+    <div class="letter" id="gLetter" aria-live="polite"></div>
+    <p class="err" id="err3" role="alert" hidden></p>
+    <div class="actions"><button class="btn primary" id="go3" type="button">Encender la vela</button></div>
+  </section>
+
+  <section class="scene" data-s="4" hidden>
+    <div>
+      <h2>Pide un <em>deseo</em></h2>
+      <p class="lead">Cuando estés lista, apaga la vela. También puedes tocarla.</p>
+    </div>
+    <div class="stage"><svg id="finalCake" class="big" viewBox="0 0 300 260" role="img" aria-label="Tu pastel con una vela encendida"></svg></div>
+    <div class="pair" id="pair">
+      <button class="catbtn cl" id="tabF" data-cat="tabby" data-awake="1" aria-label="Gato atigrado"></button>
+      <button class="catbtn cr" id="tuxF" data-cat="tux" data-awake="1" aria-label="Gato blanquinegro"></button>
+    </div>
+    <div class="bubble" id="b4" data-who="L" aria-live="polite">Pídelo en silencio.</div>
+    <div class="actions"><button class="btn primary" id="blow" type="button">Soplar la vela</button></div>
+    <div id="after" hidden>
+      <h2 id="afterTitle" tabindex="-1">Tu <em>carta</em></h2>
+      <div class="letter" id="fLetter"></div>
+      <div class="poem" id="poem"></div>
+      <div class="actions"><button class="btn" id="again" type="button">Hornearla otra vez</button></div>
+    </div>
+  </section>
+</main>
+<div class="petals" id="petals" aria-hidden="true"></div>
+
+<script>
+(function(){
+'use strict';
+const NS='http://www.w3.org/2000/svg';
+const $=(s,r)=>(r||document).querySelector(s);
+const $$=(s,r)=>Array.prototype.slice.call((r||document).querySelectorAll(s));
+const reduced=window.matchMedia&&window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+const rnd=(a,b)=>a+Math.random()*(b-a);
+const clamp=(v,a,b)=>Math.max(a,Math.min(b,v));
+const lastPick={};
+function pick(list,key){let v;let n=0;do{v=list[Math.floor(Math.random()*list.length)];n++}while(v===lastPick[key]&&n<8);lastPick[key]=v;return v}
+
+const SPONGES=[
+  {n:'Vainilla',c:'#f2d7a0',f:'#fff3d6',p:'bizcocho de vainilla',say:'Vainilla. Clásica, nunca falla.'},
+  {n:'Chocolate',c:'#6f4330',f:'#c98b63',p:'bizcocho de chocolate',say:'Chocolate. Ahora sí huele a cocina.'},
+  {n:'Fresa',c:'#f6b6c4',f:'#fff0f3',p:'bizcocho de fresa',say:'Fresa. Ya me dio hambre.'},
+  {n:'Red velvet',c:'#b83a4b',f:'#fff6f2',p:'bizcocho red velvet',say:'Red velvet. Eso sí es elegante.'}
+];
+const FROSTS=[
+  {n:'Crema',c:'#fff8ee',p:'betún de crema',say:'Crema. Sencillo y rico.'},
+  {n:'Rosa',c:'#f6a6c1',p:'betún rosa',say:'Rosa. Combina con todo.'},
+  {n:'Menta',c:'#a9e5cf',p:'betún de menta',say:'Menta. Fresquito.'},
+  {n:'Lila',c:'#cbb6f0',p:'betún lila',say:'Lila. Buen ojo.'}
+];
+const TYPES=[['fresa','Fresa'],['flor','Flor'],['cereza','Cereza'],['perlas','Perlas'],['gatito','Gatito']];
+const TOP={
+  fresa:'<path d="M0 15C-17 5-15-12 0-10C15-12 17 5 0 15Z" fill="#dc2f4d"/><path d="M-8-10L0-17L8-10L0-6Z" fill="#4f9a5f"/><g fill="#ffe58a"><circle cx="-5" cy="-3" r="1.3"/><circle cx="4" cy="-4" r="1.3"/><circle cx="0" cy="3" r="1.3"/><circle cx="-6" cy="6" r="1.3"/><circle cx="6" cy="5" r="1.3"/></g>',
+  flor:'<g fill="#f7a6c6" stroke="rgba(58,33,70,.25)" stroke-width=".8"><ellipse cx="0" cy="-9" rx="6" ry="9"/><ellipse cx="0" cy="-9" rx="6" ry="9" transform="rotate(72)"/><ellipse cx="0" cy="-9" rx="6" ry="9" transform="rotate(144)"/><ellipse cx="0" cy="-9" rx="6" ry="9" transform="rotate(216)"/><ellipse cx="0" cy="-9" rx="6" ry="9" transform="rotate(288)"/></g><circle r="5" fill="#ffd45e"/>',
+  cereza:'<path d="M-6 3Q-3-13 6-16M7 5Q9-8 6-16" fill="none" stroke="#4f7a3a" stroke-width="1.8" stroke-linecap="round"/><circle cx="-6" cy="9" r="7.5" fill="#b3162f"/><circle cx="8" cy="11" r="7.5" fill="#c41e3a"/><circle cx="-8" cy="6.5" r="1.8" fill="#fff" opacity=".7"/><circle cx="6" cy="8.5" r="1.8" fill="#fff" opacity=".7"/>',
+  perlas:'<g stroke="rgba(58,33,70,.2)" stroke-width=".8"><circle cx="-8" cy="3" r="4.2" fill="#fff"/><circle cx="0" cy="-4" r="4.2" fill="#f7d46a"/><circle cx="8" cy="3" r="4.2" fill="#cdb8f2"/><circle cx="-1" cy="7" r="4.2" fill="#f6a6c1"/><circle cx="-12" cy="-3" r="3.2" fill="#a9e5cf"/></g>',
+  gatito:'<polygon points="-11,-4 -10,-16 -2,-9" fill="#1a171d"/><polygon points="11,-4 10,-16 2,-9" fill="#1a171d"/><circle r="12" fill="#1a171d"/><ellipse cx="0" cy="5" rx="6" ry="4.5" fill="#f6f3ee"/><circle cx="-4.5" cy="-2" r="1.8" fill="#cdb66f"/><circle cx="4.5" cy="-2" r="1.8" fill="#cdb66f"/><path d="M-2 4.5h4l-2 2z" fill="#e79aa5"/>'
+};
+const TOP_SAY={
+  fresa:['L','Esa fresa no va a durar mucho aquí.'],
+  flor:['L','Flores en el pastel. Buena idea.'],
+  cereza:['L','Cuidado con la cereza, que me la como.'],
+  perlas:['L','Brillan. Me gustan.'],
+  gatito:['R','Ese gatito se me hace conocido.']
+};
+const SLOTS=[[112,72],[188,72],[70,140],[230,140],[92,74],[208,74],[132,76],[168,76],[150,134]];
+const TAB_LINES=['Miau.','¿Eso se come?','Prrr.','Mírame, estoy muy bonito.'];
+const TUX_LINES=['Mrrp.','Cinco minutitos más.','Yo no fui.'];
+const GARDEN_LINES=['Huele rico.','Esa me la quiero comer.','Cuidado, no la pises.','Bonita.','Ahí hay otra línea.','Casi.'];
+
+const state={sponge:0,frost:0,placed:[],bloom:[false,false,false,false,false],woke:false,pearl:false,out:false,scene:1};
+
+function tabbySVG(attrs){return `<svg ${attrs||''} class="cat tabby" viewBox="0 0 200 220" data-eye="3.2" aria-hidden="true">
+<g class="tail-tabby"><path d="M148 198C186 204 198 172 184 148" fill="none" stroke="#7b6a55" stroke-width="15" stroke-linecap="round"/><path d="M148 198C186 204 198 172 184 148" fill="none" stroke="#4b4136" stroke-width="15" stroke-linecap="round" stroke-dasharray="5 9" opacity=".75"/></g>
+<ellipse cx="100" cy="158" rx="64" ry="56" fill="#8b7a64"/>
+<g fill="none" stroke="#4b4136" stroke-width="5" stroke-linecap="round" opacity=".8"><path d="M48 140q10 6 22 2"/><path d="M44 158q12 7 26 3"/><path d="M48 176q12 6 24 2"/><path d="M152 140q-10 6-22 2"/><path d="M156 158q-12 7-26 3"/><path d="M152 176q-12 6-24 2"/></g>
+<ellipse cx="100" cy="150" rx="22" ry="32" fill="#f4efe6"/>
+<ellipse cx="78" cy="205" rx="15" ry="11" fill="#8b7a64"/><ellipse cx="78" cy="209" rx="13" ry="7" fill="#f4efe6"/>
+<ellipse cx="122" cy="205" rx="15" ry="11" fill="#8b7a64"/><ellipse cx="122" cy="209" rx="13" ry="7" fill="#f4efe6"/>
+<g class="head-tabby">
+<polygon points="64,62 60,26 94,46" fill="#7d6c57"/><polygon points="68,56 66,38 85,48" fill="#d9929a"/>
+<polygon points="136,62 140,26 106,46" fill="#7d6c57"/><polygon points="132,56 134,38 115,48" fill="#d9929a"/>
+<circle cx="100" cy="86" r="41" fill="#8f7e68"/>
+<g stroke="#4b4136" stroke-width="3.5" stroke-linecap="round"><path d="M100 48v14"/><path d="M90 50v10"/><path d="M110 50v10"/><path d="M60 84h10"/><path d="M61 93h9"/><path d="M140 84h-10"/><path d="M139 93h-9"/></g>
+<ellipse cx="100" cy="103" rx="18" ry="13" fill="#bfae94"/>
+<ellipse cx="82" cy="83" rx="11" ry="12" fill="#dfe38a" stroke="#4b4136" stroke-width="1.6"/><ellipse cx="118" cy="83" rx="11" ry="12" fill="#dfe38a" stroke="#4b4136" stroke-width="1.6"/>
+<g class="pupils" transform="translate(0 -1.5)"><ellipse cx="82" cy="83" rx="4.5" ry="8.5" fill="#1b1712"/><ellipse cx="118" cy="83" rx="4.5" ry="8.5" fill="#1b1712"/><circle cx="84" cy="78" r="1.8" fill="#fff"/><circle cx="120" cy="78" r="1.8" fill="#fff"/></g>
+<ellipse class="lid" cx="82" cy="83" rx="11.6" ry="12.6" fill="#8f7e68" style="animation-delay:.6s"/><ellipse class="lid" cx="118" cy="83" rx="11.6" ry="12.6" fill="#8f7e68" style="animation-delay:.6s"/>
+<path d="M95 96h10l-5 6z" fill="#d98a8f"/>
+<path d="M100 102v4M100 106q-5 5-10 1M100 106q5 5 10 1" fill="none" stroke="#4b4136" stroke-width="1.6" stroke-linecap="round"/>
+<g stroke="#f4efe6" stroke-width="1.4" stroke-linecap="round"><path d="M80 102L50 95"/><path d="M80 106L48 106"/><path d="M80 110L52 117"/><path d="M120 102L150 95"/><path d="M120 106L152 106"/><path d="M120 110L148 117"/></g>
+</g></svg>`}
+
+function tuxSVG(awake,attrs){return `<svg ${attrs||''} class="cat tux${awake?' awake':''}" viewBox="0 0 240 180" data-eye="2.4" aria-hidden="true">
+<g class="tail-tux"><path d="M54 138C8 152-2 108 22 86" fill="none" stroke="#1a171d" stroke-width="15" stroke-linecap="round"/></g>
+<g class="tux-body">
+<ellipse cx="118" cy="132" rx="86" ry="42" fill="#1a171d"/>
+<ellipse cx="86" cy="168" rx="20" ry="9" fill="#f6f3ee"/>
+<ellipse cx="172" cy="150" rx="30" ry="24" fill="#f6f3ee"/>
+<ellipse cx="150" cy="170" rx="22" ry="9" fill="#f6f3ee"/><ellipse cx="198" cy="170" rx="22" ry="9" fill="#f6f3ee"/>
+<path d="M180 138L177 162" fill="none" stroke="#2d3a0c" stroke-width="8" stroke-linecap="round"/><path d="M180 138L177 162" fill="none" stroke="#c6f23a" stroke-width="4.5" stroke-linecap="round"/>
+</g>
+<g class="tux-head">
+<polygon points="148,80 142,42 174,64" fill="#1a171d"/><polygon points="152,72 149,52 166,64" fill="#d98a9c"/>
+<polygon points="212,80 218,42 186,64" fill="#1a171d"/><polygon points="208,72 211,52 194,64" fill="#d98a9c"/>
+<circle cx="180" cy="102" r="40" fill="#1a171d"/>
+<path d="M180 72Q174 96 168 112Q180 128 192 112Q186 96 180 72Z" fill="#f6f3ee"/>
+<ellipse cx="180" cy="118" rx="15" ry="12" fill="#f6f3ee"/>
+<g class="eye-open"><ellipse cx="164" cy="98" rx="8" ry="9" fill="#cdb66f"/><ellipse cx="196" cy="98" rx="8" ry="9" fill="#cdb66f"/><g class="pupils"><ellipse cx="164" cy="98" rx="3.4" ry="7" fill="#0c0b0d"/><ellipse cx="196" cy="98" rx="3.4" ry="7" fill="#0c0b0d"/><circle cx="165.5" cy="94" r="1.4" fill="#fff"/><circle cx="197.5" cy="94" r="1.4" fill="#fff"/></g></g>
+<g class="eye-closed" fill="none" stroke="#efe9e1" stroke-width="2.6" stroke-linecap="round"><path d="M156 99q8 6 16 0"/><path d="M188 99q8 6 16 0"/></g>
+<path d="M175 111h10l-5 6z" fill="#e79aa5"/>
+<path d="M180 117v3M180 120q-4 4-8 1M180 120q4 4 8 1" fill="none" stroke="#3a3340" stroke-width="1.5" stroke-linecap="round"/>
+<g stroke="#e9e5df" stroke-width="1.3" stroke-linecap="round"><path d="M166 116L136 110"/><path d="M166 120L138 122"/><path d="M194 116L224 110"/><path d="M194 120L222 122"/></g>
+<path d="M146 136Q180 156 214 136" fill="none" stroke="#2d3a0c" stroke-width="9" stroke-linecap="round"/><path d="M146 136Q180 156 214 136" fill="none" stroke="#c6f23a" stroke-width="5.5" stroke-linecap="round"/>
+</g>
+<g class="zzz" font-family="Figtree,sans-serif" font-weight="700" fill="#a58ccf"><text x="212" y="56" font-size="20">z</text><text x="226" y="36" font-size="15">z</text></g>
+</svg>`}
+
+function cakeBase(){
+  const d1=[[64,14],[96,24],[132,12],[170,22],[206,14],[236,20]].map(a=>`<rect x="${a[0]-6}" y="158" width="12" height="${a[1]+8}" rx="6"/>`).join('');
+  const d2=[[100,12],[132,20],[166,10],[196,16]].map(a=>`<rect x="${a[0]-6}" y="100" width="12" height="${a[1]+6}" rx="6"/>`).join('');
+  return `<ellipse cx="150" cy="236" rx="132" ry="15" fill="#fff" stroke="#d9b9c8" stroke-width="2"/><ellipse cx="150" cy="233" rx="116" ry="10" fill="#f6e7ee"/>
+<rect x="48" y="150" width="204" height="80" rx="16" fill="var(--sponge)" stroke="#d9b9c8" stroke-width="1.6"/>
+<rect x="49" y="190" width="202" height="8" fill="var(--filling)"/>
+<g fill="var(--frost)" stroke="#d9b9c8" stroke-width="1.6"><rect x="44" y="140" width="212" height="26" rx="13"/>${d1}</g>
+<rect x="46" y="150" width="208" height="12" rx="6" fill="var(--frost)"/>
+<rect x="84" y="92" width="132" height="58" rx="14" fill="var(--sponge)" stroke="#d9b9c8" stroke-width="1.6"/>
+<rect x="85" y="120" width="130" height="8" fill="var(--filling)"/>
+<g fill="var(--frost)" stroke="#d9b9c8" stroke-width="1.6"><rect x="80" y="82" width="140" height="24" rx="12"/>${d2}</g>
+<rect x="82" y="92" width="136" height="12" rx="6" fill="var(--frost)"/>`;
+}
+const CANDLE='<g id="candle"><rect x="145" y="46" width="10" height="40" rx="2" fill="#fff" stroke="#d9b9c8" stroke-width="1.5"/><path d="M145 58l10-5M145 68l10-5M145 78l10-5" stroke="#f08aa8" stroke-width="3"/><path d="M150 46v-4" stroke="#3a2146" stroke-width="1.6" stroke-linecap="round"/><g class="flame"><path d="M150 18C142 29 143 39 150 42C157 39 158 29 150 18Z" fill="#ffb02e"/><path d="M150 27C146 33 147 38 150 40C153 38 154 33 150 27Z" fill="#fff1a8"/></g><path class="smoke" d="M150 36q-7-8 0-15q7-7 0-14" fill="none" stroke="#b9aac4" stroke-width="3" stroke-linecap="round"/><rect x="138" y="8" width="24" height="80" fill="transparent"/></g>';
+function topsMarkup(){return state.placed.map(t=>`<g transform="translate(${t.x} ${t.y}) rotate(${t.r}) scale(${t.s})">${TOP[t.type]}</g>`).join('')}
+
+function say(who,text){const b=$('.scene:not([hidden]) .bubble');if(!b)return;b.dataset.who=who;b.textContent=text;b.classList.remove('say');void b.offsetWidth;b.classList.add('say')}
+function hop(el){el.classList.remove('hop');void el.offsetWidth;el.classList.add('hop')}
+function applyCake(){const r=document.documentElement.style;const s=SPONGES[state.sponge],f=FROSTS[state.frost];r.setProperty('--sponge',s.c);r.setProperty('--filling',s.f);r.setProperty('--frost',f.c)}
+
+function fillCats(){$$('[data-cat]').forEach(b=>{b.innerHTML=b.dataset.cat==='tabby'?tabbySVG():tuxSVG(!!b.dataset.awake)})}
+
+function look(ev){
+  $$('svg.cat').forEach(svg=>{
+    const r=svg.getBoundingClientRect();if(!r.width)return;
+    const g=svg.querySelector('.pupils');if(!g)return;
+    const max=parseFloat(svg.getAttribute('data-eye'))||3;
+    const cx=r.left+r.width/2,cy=r.top+r.height*0.4;
+    const dx=ev.clientX-cx,dy=ev.clientY-cy;const d=Math.hypot(dx,dy)||1;const k=Math.min(1,d/160);
+    g.setAttribute('transform','translate('+(dx/d*max*k).toFixed(2)+' '+(dy/d*max*k).toFixed(2)+')');
+  });
+}
+window.addEventListener('pointermove',look,{passive:true});
+
+function go(n){
+  state.scene=n;
+  $$('.scene').forEach(s=>{s.hidden=s.dataset.s!==String(n)});
+  $$('#steps span').forEach((sp,i)=>sp.classList.toggle('on',i<n));
+  $('#steps').setAttribute('aria-label','Paso '+n+' de 4');
+  window.scrollTo({top:0,behavior:reduced?'auto':'smooth'});
+}
+
+function wake(){
+  const svg=$('#tux1 svg');svg.classList.add('awake','stretch');
+  setTimeout(()=>svg.classList.remove('stretch'),1000);
+  state.woke=true;$('#go1').textContent='Entrar a la cocina';
+  say('R','Mmh... ¿ya llegaste? Pasa, hay algo en el horno.');
+}
+
+function buildChips(el,list,key){
+  el.innerHTML='';
+  list.forEach((it,i)=>{
+    const b=document.createElement('button');b.type='button';b.className='chip';
+    b.setAttribute('aria-pressed',i===state[key]?'true':'false');
+    b.innerHTML='<span class="dot" style="background:'+it.c+'"></span>'+it.n;
+    b.addEventListener('click',()=>{state[key]=i;$$('.chip',el).forEach((x,j)=>x.setAttribute('aria-pressed',j===i?'true':'false'));applyCake();say('L',it.say)});
+    el.appendChild(b);
+  });
+}
+
+const cakeSvg=$('#cake');
+function initCake(){cakeSvg.innerHTML=cakeBase()+'<g id="tops"></g><circle id="pearl" cx="236" cy="226" r="5" fill="#fff" stroke="#d9b9c8"/>'}
+function icon(type){return '<svg viewBox="-20 -20 40 40" aria-hidden="true">'+TOP[type]+'</svg>'}
+function svgPt(x,y){const pt=cakeSvg.createSVGPoint();pt.x=x;pt.y=y;return pt.matrixTransform(cakeSvg.getScreenCTM().inverse())}
+function overCake(ev){const r=cakeSvg.getBoundingClientRect();return ev.clientX>=r.left-10&&ev.clientX<=r.right+10&&ev.clientY>=r.top-10&&ev.clientY<=r.bottom+10}
+
+function addTop(type,x,y){
+  if(state.placed.length>=9){say('L','Ya no cabe nada más.');return}
+  const slot=SLOTS[state.placed.length%SLOTS.length];
+  const t={type:type,x:clamp(x==null?slot[0]+rnd(-4,4):x,56,244),y:clamp(y==null?slot[1]+rnd(-3,3):y,52,228),r:Math.round(rnd(-14,14)),s:+(0.92+Math.random()*0.18).toFixed(2)};
+  state.placed.push(t);
+  const g=document.createElementNS(NS,'g');
+  g.setAttribute('transform','translate('+t.x.toFixed(1)+' '+t.y.toFixed(1)+') rotate('+t.r+') scale('+t.s+')');
+  g.innerHTML='<g class="pop">'+TOP[type]+'</g>';
+  $('#tops').appendChild(g);
+  say(TOP_SAY[type][0],TOP_SAY[type][1]);
+  $('#err').hidden=true;
+  if(state.placed.length===5&&!state.pearl){state.pearl=true;setTimeout(()=>{$('#pearl').classList.add('roll');hop($('#tuxK'));if(state.scene===2)say('R','Yo no fui.')},800)}
+}
+
+function buildPalette(){
+  const box=$('#palette');box.innerHTML='';
+  TYPES.forEach(tp=>{
+    const b=document.createElement('button');b.type='button';b.className='tp';b.dataset.type=tp[0];
+    b.setAttribute('aria-label',tp[1]+'. Arrastra al pastel o presiona Enter');
+    b.innerHTML=icon(tp[0])+'<span>'+tp[1]+'</span>';
+    b.addEventListener('pointerdown',e=>{
+      if(e.pointerType==='mouse'&&e.button!==0)return;
+      e.preventDefault();
+      const type=tp[0];const sx=e.clientX,sy=e.clientY;let moved=false;
+      const ghost=document.createElement('div');ghost.className='ghost';ghost.innerHTML=icon(type);document.body.appendChild(ghost);
+      const pos=ev=>{ghost.style.transform='translate('+(ev.clientX-28)+'px,'+(ev.clientY-28)+'px)'};
+      pos(e);
+      try{b.setPointerCapture(e.pointerId)}catch(_){}
+      const done=()=>{b.removeEventListener('pointermove',mv);b.removeEventListener('pointerup',up);b.removeEventListener('pointercancel',cancel);ghost.remove();cakeSvg.classList.remove('drop')};
+      const mv=ev=>{if(Math.hypot(ev.clientX-sx,ev.clientY-sy)>6){moved=true;ghost.style.opacity='.9'}pos(ev);cakeSvg.classList.toggle('drop',moved&&overCake(ev))};
+      const up=ev=>{
+        const over=overCake(ev);done();
+        if(moved){if(over){const p=svgPt(ev.clientX,ev.clientY);addTop(type,p.x,p.y)}}
+        else addTop(type);
+      };
+      const cancel=()=>done();
+      b.addEventListener('pointermove',mv);b.addEventListener('pointerup',up);b.addEventListener('pointercancel',cancel);
+    });
+    b.addEventListener('keydown',e=>{if(e.key==='Enter'||e.key===' '){e.preventDefault();addTop(tp[0])}});
+    box.appendChild(b);
+  });
+}
+
+function letterLines(){
+  const s=SPONGES[state.sponge],f=FROSTS[state.frost];
+  return [
+    'Esta carta se horneó pensando en ti.',
+    'Algunas personas despiertan curiosidad sin proponérselo.',
+    'Tu pastel quedó con '+s.p+' y '+f.p+'. Cada detalle lo elegiste tú.',
+    'Gatos, flores y algo dulce. Cosas pequeñas que hacen un día más amable.',
+    'Pide un deseo.'
+  ];
+}
+function paintLetter(el,all){
+  const lines=letterLines();
+  el.innerHTML=lines.map((t,i)=>(all||state.bloom[i])?'<p class="slot">'+t+'</p>':'<p class="slot empty"></p>').join('');
+}
+
+const POEM={
+  title:'Jardín de medianoche',
+  stanzas:[
+    ['Hay un jardín que solo se ve de lejos,','detrás de una reja y una luz encendida.','Las flores guardan secretos que no conozco','y aun así uno se queda mirando, sin entrar.'],
+    ['Dicen que lo oscuro también florece.','Que lo que brilla a medianoche','no pide ser tocado,','solo que alguien se detenga a ver.']
+  ]
+};
+function paintPoem(){
+  let i=0;
+  $('#poem').innerHTML='<h3>'+POEM.title+'</h3>'+POEM.stanzas.map(st=>'<p class="stanza">'+st.map(l=>'<span style="--i:'+(i++)+'">'+l+'</span>').join('')+'</p>').join('');
+}
+
+function buildGarden(){
+  const cols=[['#f08aa8','#ffd45e'],['#ffd45e','#c9772b'],['#cdb8f2','#fff4a8'],['#ffffff','#ffcf4d'],['#ff9b7a','#ffe28a']];
+  const xs=[40,112,184,256,328],ys=[200,192,204,194,198];
+  let h='<rect width="368" height="260" fill="#d9efe9"/><circle cx="326" cy="38" r="18" fill="#f7d46a"/>';
+  h+='<path d="M34 54q0-11 11-11q4-9 15-7q9-4 15 5q11 0 11 11z" fill="#fff" opacity=".85"/>';
+  h+='<ellipse cx="184" cy="268" rx="270" ry="112" fill="#b9e0c4"/><ellipse cx="60" cy="282" rx="170" ry="90" fill="#9fd3ad"/>';
+  h+='<g transform="translate(109 36) scale(.5)">'+cakeBase()+topsMarkup()+'</g>';
+  h+=tabbySVG('x="6" y="90" width="90" height="99"');
+  h+=tuxSVG(true,'x="262" y="102" width="98" height="73"');
+  h+=cols.map((c,i)=>{
+    const x=xs[i],y=ys[i],len=252-y;
+    const petals=[0,1,2,3,4,5].map(k=>'<g transform="rotate('+(k*60)+')"><ellipse class="petal" cx="0" cy="-12" rx="7" ry="12" fill="'+c[0]+'" stroke="rgba(58,33,70,.28)" stroke-width="1"/></g>').join('');
+    return '<g class="flower" data-i="'+i+'" tabindex="0" role="button" aria-label="Flor '+(i+1)+' de 5. Tócala para abrirla" transform="translate('+x+' '+y+')">'
+      +'<path d="M0 10C3 40-3 '+(len*0.6).toFixed(1)+' 0 '+len+'" fill="none" stroke="#4f9a6f" stroke-width="4" stroke-linecap="round"/>'
+      +'<path d="M0 '+(len*0.55).toFixed(1)+'q-16-2-20-14q14-2 20 14z" fill="#4f9a6f"/>'
+      +'<circle class="ring" r="24" fill="none" stroke="'+c[0]+'" stroke-width="3"/>'
+      +petals+'<circle class="calyx" r="6.5" fill="#4f9a6f"/><circle class="core" r="6" fill="'+c[1]+'"/>'
+      +'<circle r="30" fill="transparent"/></g>';
+  }).join('');
+  $('#garden').innerHTML=h;
+  $$('.flower',$('#garden')).forEach(f=>{
+    const i=+f.dataset.i;
+    f.addEventListener('click',()=>bloom(i));
+    f.addEventListener('keydown',e=>{if(e.key==='Enter'||e.key===' '){e.preventDefault();bloom(i)}});
+  });
+  state.bloom=[false,false,false,false,false];
+  paintLetter($('#gLetter'),false);
+  $('#count').textContent='0 de 5 flores abiertas';
+  $('#err3').hidden=true;
+}
+function bloom(i){
+  if(state.bloom[i])return;
+  state.bloom[i]=true;
+  const f=$$('.flower',$('#garden'))[i];f.classList.add('open');f.setAttribute('aria-label','Flor '+(i+1)+' abierta');
+  const slot=$$('.slot',$('#gLetter'))[i];slot.className='slot new';slot.textContent=letterLines()[i];
+  const n=state.bloom.filter(Boolean).length;
+  $('#count').textContent=n+' de 5 flores abiertas';
+  $('#err3').hidden=true;
+  say('L',n===5?'Ya está completa. Falta la vela.':pick(GARDEN_LINES,'g'));
+}
+
+function buildFinal(){
+  const fc=$('#finalCake');fc.classList.remove('out');
+  fc.innerHTML=cakeBase()+topsMarkup()+CANDLE;
+  $('#after').hidden=true;$('#blow').hidden=false;
+  $('#pair').classList.remove('cuddle');
+  state.out=false;
+  say('L','Pídelo en silencio.');
+}
+function rain(){
+  if(reduced)return;
+  const box=$('#petals');const cs=['#f08aa8','#f6a6c1','#cdb8f2','#f7d46a','#ffffff','#ff9b7a'];
+  for(let i=0;i<34;i++){
+    const p=document.createElement('span');p.className='fall';
+    p.style.cssText='--x:'+(Math.random()*100).toFixed(1)+'%;--c:'+cs[i%cs.length]+';--d:'+(3.5+Math.random()*3).toFixed(2)+'s;--dl:'+(Math.random()*1.2).toFixed(2)+'s;--sway:'+Math.round(rnd(-60,60))+'px;--rot:'+Math.round(rnd(200,620))+'deg';
+    box.appendChild(p);setTimeout(()=>p.remove(),9000);
+  }
+}
+function blow(){
+  if(state.out)return;
+  state.out=true;
+  $('#finalCake').classList.add('out');
+  $('#blow').hidden=true;
+  $('#pair').classList.add('cuddle');
+  const t=$('#tuxF svg');if(t)t.classList.remove('awake');
+  paintLetter($('#fLetter'),true);
+  paintPoem();
+  $('#after').hidden=false;
+  say('L','Se te cumple, seguro.');
+  rain();
+  setTimeout(()=>{try{$('#afterTitle').focus({preventScroll:true});$('#afterTitle').scrollIntoView({behavior:reduced?'auto':'smooth',block:'start'})}catch(_){}},900);
+}
+
+function reset(){
+  state.sponge=0;state.frost=0;state.placed=[];state.pearl=false;state.woke=false;state.out=false;
+  applyCake();initCake();buildChips($('#sponges'),SPONGES,'sponge');buildChips($('#frosts'),FROSTS,'frost');
+  $('#err').hidden=true;
+  fillCats();
+  $('#go1').textContent='Despertar al gato';
+  const b1=$('#b1');b1.textContent='Zzz';b1.dataset.who='R';
+  go(1);
+}
+
+$$('.catbtn').forEach(b=>b.addEventListener('click',()=>{
+  if(b.id==='tux1'&&!state.woke){wake();return}
+  hop(b);
+  const tab=b.dataset.cat==='tabby';
+  say(tab?'L':'R',pick(tab?TAB_LINES:TUX_LINES,b.dataset.cat));
+}));
+$('#go1').addEventListener('click',()=>{if(!state.woke){wake();return}go(2)});
+$('#undo').addEventListener('click',()=>{
+  if(!state.placed.length){say('L','No hay nada que quitar.');return}
+  state.placed.pop();const tops=$('#tops');tops.removeChild(tops.lastChild);say('L','Ahí lo quité.');
+});
+$('#go2').addEventListener('click',()=>{
+  const err=$('#err');
+  if(state.placed.length<3){err.textContent='Pon al menos 3 toppings. Arrastra uno al pastel o tócalo.';err.hidden=false;say('L','Todavía se ve muy solo.');return}
+  err.hidden=true;buildGarden();go(3);say('L','Cada flor guarda una línea.');
+});
+$('#go3').addEventListener('click',()=>{
+  const err=$('#err3');const n=state.bloom.filter(Boolean).length;
+  if(n<5){err.textContent='Faltan flores por abrir. Tócalas todas para leer la carta completa.';err.hidden=false;return}
+  err.hidden=true;buildFinal();go(4);
+});
+$('#blow').addEventListener('click',blow);
+$('#finalCake').addEventListener('click',e=>{if(e.target.closest&&e.target.closest('#candle'))blow()});
+$('#again').addEventListener('click',reset);
+
+applyCake();initCake();buildChips($('#sponges'),SPONGES,'sponge');buildChips($('#frosts'),FROSTS,'frost');buildPalette();fillCats();
+})();
+</script>
+</body>
+</html>
